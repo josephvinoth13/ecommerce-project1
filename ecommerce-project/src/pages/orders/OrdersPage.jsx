@@ -1,15 +1,15 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { useState, useEffect,Fragment } from 'react';
-import { Header } from '../components/Header';
-import { formatMoney } from '../utils/money';
+import { useState, useEffect, Fragment } from 'react';
+import { Header } from '../../components/Header';
+import { formatMoney } from '../../utils/money';
 import './OrdersPage.css';
 
 export function OrdersPage({ cart }) {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/orders')
+    axios.get('/api/orders?expand=products')
       .then((response) => {
         setOrders(response.data);
       });
@@ -17,15 +17,15 @@ export function OrdersPage({ cart }) {
 
   return (
     <>
+      <title>Orders</title>
+
       <Header cart={cart} />
 
       <div className="orders-page">
         <div className="page-title">Your Orders</div>
 
         <div className="orders-grid">
-
           {orders.map((order) => {
-
             return (
               <div key={order.id} className="order-container">
 
@@ -57,11 +57,10 @@ export function OrdersPage({ cart }) {
 
                         <div className="product-details">
                           <div className="product-name">
-                          {orderProduct.product.name}
+                            {orderProduct.product.name}
                           </div>
                           <div className="product-delivery-date">
-                           Arriving on:{dayjs(orderProduct.estimatedDeliveryTimeMs)
-                           .format('MMMM D')}
+                            Arriving on: {dayjs(orderProduct.estimatedDeliveryTimeMs).format('MMMM D')}
                           </div>
                           <div className="product-quantity">
                             Quantity: {orderProduct.quantity}
@@ -79,21 +78,15 @@ export function OrdersPage({ cart }) {
                             </button>
                           </a>
                         </div>
-
                       </Fragment>
-
                     );
                   })}
-                  
-
-                 
                 </div>
               </div>
             );
           })}
         </div>
       </div>
-
     </>
   );
 }
