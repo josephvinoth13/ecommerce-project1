@@ -1,16 +1,23 @@
 import {Link} from 'react-router';
+import { useState } from 'react';
 
 import './header.css';
 
-export function Header({ cart }) {
+export function Header({ cart, user, onLogout, searchValue = '', onSearchChange }) {
   let totalQuantity = 0;
+  const [searchText, setSearchText] = useState(searchValue);
 
-  
   cart.forEach((cartItem)=> {
     totalQuantity += cartItem.quantity;
 
 
   });
+
+  function handleSearchChange(event) {
+    const value = event.target.value;
+    setSearchText(value);
+    onSearchChange?.(value);
+  }
 
   return (
     <div className="header">
@@ -23,17 +30,30 @@ export function Header({ cart }) {
         </Link>
       </div>
 
-      <div className="middle-section">
-        <input className="search-bar" type="text" placeholder="Search" />
+      <form className="middle-section" onSubmit={(event) => event.preventDefault()}>
+        <input
+          className="search-bar"
+          type="search"
+          placeholder="Search products"
+          value={searchText}
+          onChange={handleSearchChange}
+          aria-label="Search products"
+        />
 
-        <button className="search-button">
-          <img className="search-icon" src="images/icons/search-icon.png" />
+        <button className="search-button" type="submit" aria-label="Search products">
+          <img className="search-icon" src="images/icons/search-icon.png" alt="" />
         </button>
-      </div>
+      </form>
       <div className="right-section">
-        <Link className="login-link header-link" to="/login">
-          <span className="login-text">Login</span>
-        </Link>
+        {user ? (
+          <button className="logout-button header-link" type="button" onClick={onLogout}>
+            <span className="login-text">Logout</span>
+          </button>
+        ) : (
+          <Link className="login-link header-link" to="/login">
+            <span className="login-text">Login</span>
+          </Link>
+        )}
 
 
         <Link className="orders-link header-link" to="/orders">
@@ -42,7 +62,7 @@ export function Header({ cart }) {
         </Link>
 
         <Link className="cart-link header-link" to="/checkout">
-          <img className="cart-icon" src="images/icons/cart-icon.png" />
+          <img className="cart-icon" src="images/icons/cart-icon.png" alt="" />
           <div className="cart-quantity">{totalQuantity}</div>
           <div className="cart-text">Cart</div>
         </Link>

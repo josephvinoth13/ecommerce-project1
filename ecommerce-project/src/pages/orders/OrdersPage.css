@@ -159,6 +159,10 @@
   width: 100%;
   font-size: 14px;
   padding: 8px;
+  text-align: center;
+  text-decoration: none;
+  box-sizing: border-box;
+  display: inline-block;
 }
 
 @media (max-width: 800px) {

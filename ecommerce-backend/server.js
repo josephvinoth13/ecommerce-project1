@@ -9,15 +9,18 @@ import cartItemRoutes from './routes/cartItems.js';
 import orderRoutes from './routes/orders.js';
 import resetRoutes from './routes/reset.js';
 import paymentSummaryRoutes from './routes/paymentSummary.js';
+import authRoutes from './routes/auth.js';
 import { Product } from './models/Product.js';
 import { DeliveryOption } from './models/DeliveryOption.js';
 import { CartItem } from './models/CartItem.js';
 import { Order } from './models/Order.js';
+import './models/User.js';
 import { defaultProducts } from './defaultData/defaultProducts.js';
 import { defaultDeliveryOptions } from './defaultData/defaultDeliveryOptions.js';
 import { defaultCart } from './defaultData/defaultCart.js';
 import { defaultOrders } from './defaultData/defaultOrders.js';
 import fs from 'fs';
+import { DataTypes } from 'sequelize';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -38,6 +41,7 @@ app.use('/api/cart-items', cartItemRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/reset', resetRoutes);
 app.use('/api/payment-summary', paymentSummaryRoutes);
+app.use('/api/auth', authRoutes);
 
 // Serve static files from the dist folder
 app.use(express.static(path.join(__dirname, 'dist')));
@@ -62,6 +66,14 @@ app.use((err, req, res, next) => {
 
 // Sync database and load default data if none exist
 await sequelize.sync();
+
+const orderColumns = await sequelize.getQueryInterface().describeTable('Orders');
+if (!orderColumns.userId) {
+  await sequelize.getQueryInterface().addColumn('Orders', 'userId', {
+    type: DataTypes.UUID,
+    allowNull: true
+  });
+}
 
 const productCount = await Product.count();
 if (productCount === 0) {

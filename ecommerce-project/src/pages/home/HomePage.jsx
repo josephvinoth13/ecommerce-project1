@@ -4,8 +4,9 @@ import { Header } from '../../components/Header';
 import { ProductsGrid } from './ProductsGrid';
 import './HomePage.css';
 
-export function HomePage({ cart, loadCart }) {
+export function HomePage({ cart, loadCart, user, onLogout }) {
   const [products, setProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const getHomeData = async () => {
@@ -20,10 +21,20 @@ export function HomePage({ cart, loadCart }) {
     <>
       <title>Ecommerce Project</title>
 
-      <Header cart={cart} />
+      <Header
+        cart={cart}
+        user={user}
+        onLogout={onLogout}
+        searchValue={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
 
       <div className="home-page">
-        <ProductsGrid products={products} loadCart={loadCart} />
+        <ProductsGrid
+          products={products}
+          loadCart={loadCart}
+          searchQuery={searchQuery}
+        />
       </div>
     </>
   );

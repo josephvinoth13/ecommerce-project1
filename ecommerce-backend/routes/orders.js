@@ -3,12 +3,14 @@ import { Order } from '../models/Order.js';
 import { Product } from '../models/Product.js';
 import { DeliveryOption } from '../models/DeliveryOption.js';
 import { CartItem } from '../models/CartItem.js';
+import { requireAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', requireAuth, async (req, res) => {
   const expand = req.query.expand;
-  let orders = await Order.unscoped().findAll({ order: [['orderTimeMs', 'DESC']] }); // Sort by most recent
+  const where = req.user.role === 'admin' ? {} : { userId: req.user.id };
+  let orders = await Order.unscoped().findAll({ where, order: [['orderTimeMs', 'DESC']] });
 
   if (expand === 'products') {
     orders = await Promise.all(orders.map(async (order) => {
@@ -29,7 +31,7 @@ router.get('/', async (req, res) => {
   res.json(orders);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', requireAuth, async (req, res) => {
   const cartItems = await CartItem.findAll();
 
   if (cartItems.length === 0) {
@@ -60,6 +62,7 @@ router.post('/', async (req, res) => {
   totalCostCents = Math.round(totalCostCents * 1.1);
 
   const order = await Order.create({
+    userId: req.user.id,
     orderTimeMs: Date.now(),
     totalCostCents,
     products
@@ -70,13 +73,16 @@ router.post('/', async (req, res) => {
   res.status(201).json(order);
 });
 
-router.get('/:orderId', async (req, res) => {
+router.get('/:orderId', requireAuth, async (req, res) => {
   const { orderId } = req.params;
   const expand = req.query.expand;
 
   let order = await Order.findByPk(orderId);
   if (!order) {
     return res.status(404).json({ error: 'Order not found' });
+  }
+  if (req.user.role !== 'admin' && order.userId !== req.user.id) {
+    return res.status(403).json({ error: 'You are not authorized to view this order' });
   }
 
   if (expand === 'products') {

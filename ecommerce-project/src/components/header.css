@@ -23,15 +23,26 @@
   .header .left-section {
     width: unset;
   }
+
+  .header .right-section {
+    width: auto;
+  }
+
+  .header .orders-link {
+    display: none;
+  }
 }
 
 .header .header-link {
-  display: inline-block;
-  padding: 6px 9.5px;
-  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  border-radius: 4px;
   cursor: pointer;
   text-decoration: none;
-  border: 1px solid rgba(0, 0, 0, 0);
+  border: 1px solid transparent;
 }
 
 .header .header-link:hover {
@@ -65,19 +76,26 @@
   margin-left: 10px;
   margin-right: 10px;
   display: flex;
+  height: 40px;
 }
 
 .header .search-bar {
   flex: 1;
   width: 0;
   font-size: 16px;
-  height: 38px;
-  padding-left: 15px;
-  border: none;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  height: 40px;
+  padding: 0 14px;
+  color: rgb(33, 33, 33);
+  background: white;
+  border: 2px solid transparent;
+  border-right: 0;
+  border-radius: 6px 0 0 6px;
+  box-sizing: border-box;
+}
+
+.header .search-bar:focus {
+  outline: none;
+  border-color: rgb(186, 255, 190);
 }
 
 .header .search-button {
@@ -85,9 +103,18 @@
   border: none;
   width: 45px;
   height: 40px;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-radius: 0 6px 6px 0;
   flex-shrink: 0;
+}
+
+.header .search-button:hover {
+  background-color: rgb(153, 236, 160);
+}
+
+.header .search-button:focus-visible,
+.header .header-link:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
 }
 
 .header .search-icon {
@@ -97,7 +124,7 @@
 }
 
 .header .right-section {
-  width: 180px;
+  width: 230px;
   flex-shrink: 0;
   display: flex;
   justify-content: end;
@@ -105,12 +132,21 @@
 
 .header .login-link {
   color: white;
-
   display: flex;
   align-items: center;
   padding-left: 13px;
   padding-right: 13px;
+}
 
+.header .logout-button {
+  color: white;
+  background: transparent;
+  font: inherit;
+  border: 1px solid transparent;
+}
+
+.header .logout-button:hover {
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 .header .login-text {

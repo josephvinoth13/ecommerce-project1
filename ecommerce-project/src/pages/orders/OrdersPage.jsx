@@ -2,16 +2,21 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { useState, useEffect, Fragment } from 'react';
 import { Header } from '../../components/Header';
+import { Link } from 'react-router';
 import { formatMoney } from '../../utils/money';
 import './OrdersPage.css';
 
-export function OrdersPage({ cart }) {
+export function OrdersPage({ cart, user, onLogout }) {
   const [orders, setOrders] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     axios.get('/api/orders?expand=products')
       .then((response) => {
         setOrders(response.data);
+      })
+      .catch(() => {
+        setError('Unable to load your orders. Please try again.');
       });
   }, []);
 
@@ -19,10 +24,11 @@ export function OrdersPage({ cart }) {
     <>
       <title>Orders</title>
 
-      <Header cart={cart} />
+      <Header cart={cart} user={user} onLogout={onLogout} />
 
       <div className="orders-page">
         <div className="page-title">Your Orders</div>
+        {error && <p role="alert">{error}</p>}
 
         <div className="orders-grid">
           {orders.map((order) => {
@@ -49,6 +55,8 @@ export function OrdersPage({ cart }) {
 
                 <div className="order-details-grid">
                   {order.products.map((orderProduct) => {
+                    if (!orderProduct.product) return null;
+
                     return (
                       <Fragment key={orderProduct.product.id}>
                         <div className="product-image-container">
@@ -72,11 +80,12 @@ export function OrdersPage({ cart }) {
                         </div>
 
                         <div className="product-actions">
-                          <a href="/tracking">
-                            <button className="track-package-button button-secondary">
-                              Track package
-                            </button>
-                          </a>
+                          <Link
+                            className="track-package-button button-secondary"
+                            to={`/tracking/${order.id}/${orderProduct.productId}`}
+                          >
+                            Track package
+                          </Link>
                         </div>
                       </Fragment>
                     );
