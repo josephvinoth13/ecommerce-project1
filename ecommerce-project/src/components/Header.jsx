@@ -30,8 +30,12 @@ export function Header({ cart }) {
           <img className="search-icon" src="images/icons/search-icon.png" />
         </button>
       </div>
-
       <div className="right-section">
+        <Link className="login-link header-link" to="/login">
+          <span className="login-text">Login</span>
+        </Link>
+
+
         <Link className="orders-link header-link" to="/orders">
 
           <span className="orders-text">Orders</span>

@@ -12,6 +12,7 @@ export function Product({ product, loadCart }) {
     });
     await loadCart();
   };
+ 
 
   const selectQuantity = (event) => {
     const quantitySelected = Number(event.target.value);
@@ -58,13 +59,11 @@ export function Product({ product, loadCart }) {
 
       <div className="product-spacer"></div>
 
-      <div className="added-to-cart">
-        <img src="images/icons/checkmark.png" />
+      <div className="added-to-cart"
+      onClick={addToCart}>
+        <img src="images/icons/checkmark.png"/>
         Added
       </div>
-      
-
-
 
       <button className="add-to-cart-button button-primary"
         onClick={addToCart}>
