@@ -44,17 +44,13 @@ app.use('/api/payment-summary', paymentSummaryRoutes);
 app.use('/api/auth', authRoutes);
 
 // Serve static files from the dist folder
-app.use(express.static(path.join(__dirname, 'dist')));
-
-// Catch-all route to serve index.html for any unmatched routes
-app.get('*', (req, res) => {
-  const indexPath = path.join(__dirname, 'dist', 'index.html');
-  if (fs.existsSync(indexPath)) {
-    res.sendFile(indexPath);
-  } else {
-    res.status(404).send('index.html not found');
-  }
+// Backend health-check route
+app.get('/', (req, res) => {
+  res.status(200).json({
+    message: 'E-commerce backend is running successfully!'
+  });
 });
+
 
 // Error handling middleware
 /* eslint-disable no-unused-vars */
