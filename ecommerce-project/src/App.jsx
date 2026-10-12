@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router';
+import { api } from './api';
 import { clearAuthSession, initializeAuth } from './auth';
 import { HomePage } from './pages/home/HomePage';
 import { CheckoutPage } from './pages/checkout/CheckoutPage';
@@ -15,7 +15,7 @@ function App() {
   const [authChecked, setAuthChecked] = useState(false);
 
   const loadCart = async () => {
-    const response = await axios.get('/api/cart-items?expand=product');
+    const response = await api.get('/api/cart-items?expand=product');
     setCart(response.data);
   };
 
@@ -26,7 +26,7 @@ function App() {
       setAuthChecked(true);
       return;
     }
-    axios.get('/api/auth/me')
+    api.get('/api/auth/me')
       .then((response) => setUser(response.data.user))
       .catch(() => clearAuthSession())
       .finally(() => setAuthChecked(true));

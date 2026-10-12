@@ -1,9 +1,9 @@
-import axios from 'axios';
 import dayjs from 'dayjs';
 import { useState, useEffect, Fragment } from 'react';
 import { Header } from '../../components/Header';
 import { Link } from 'react-router';
 import { formatMoney } from '../../utils/money';
+import { api, getAssetUrl } from '../../api';
 import './OrdersPage.css';
 
 export function OrdersPage({ cart, user, onLogout }) {
@@ -11,7 +11,7 @@ export function OrdersPage({ cart, user, onLogout }) {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get('/api/orders?expand=products')
+    api.get('/api/orders?expand=products')
       .then((response) => {
         setOrders(response.data);
       })
@@ -60,7 +60,7 @@ export function OrdersPage({ cart, user, onLogout }) {
                     return (
                       <Fragment key={orderProduct.product.id}>
                         <div className="product-image-container">
-                          <img src={orderProduct.product.image} />
+                          <img src={getAssetUrl(orderProduct.product.image)} />
                         </div>
 
                         <div className="product-details">
@@ -74,7 +74,7 @@ export function OrdersPage({ cart, user, onLogout }) {
                             Quantity: {orderProduct.quantity}
                           </div>
                           <button className="buy-again-button button-primary">
-                            <img className="buy-again-icon" src="images/icons/buy-again.png" />
+                            <img className="buy-again-icon" src={getAssetUrl('images/icons/buy-again.png')} />
                             <span className="buy-again-message">Add to Cart</span>
                           </button>
                         </div>

@@ -1,5 +1,6 @@
 import {Link} from 'react-router';
 import { useState } from 'react';
+import { getAssetUrl } from '../api';
 
 import './header.css';
 
@@ -24,9 +25,9 @@ export function Header({ cart, user, onLogout, searchValue = '', onSearchChange 
       <div className="left-section">
         <Link to="/" className="header-link">
           <img className="logo"
-            src="public/images/logo-white.png" />
+            src={getAssetUrl('public/images/logo-white.png')} />
           <img className="mobile-logo"
-            src="public/images/mobile-logo-white.png" />
+            src={getAssetUrl('public/images/mobile-logo-white.png')} />
         </Link>
       </div>
 
@@ -41,7 +42,7 @@ export function Header({ cart, user, onLogout, searchValue = '', onSearchChange 
         />
 
         <button className="search-button" type="submit" aria-label="Search products">
-          <img className="search-icon" src="images/icons/search-icon.png" alt="" />
+          <img className="search-icon" src={getAssetUrl('images/icons/search-icon.png')} alt="" />
         </button>
       </form>
       <div className="right-section">
@@ -62,7 +63,7 @@ export function Header({ cart, user, onLogout, searchValue = '', onSearchChange 
         </Link>
 
         <Link className="cart-link header-link" to="/checkout">
-          <img className="cart-icon" src="images/icons/cart-icon.png" alt="" />
+          <img className="cart-icon" src={getAssetUrl('images/icons/cart-icon.png')} alt="" />
           <div className="cart-quantity">{totalQuantity}</div>
           <div className="cart-text">Cart</div>
         </Link>

@@ -9,5 +9,5 @@ it('formats 1999 cents as $19.99', () =>{
 
 });
 it ('display 2 decimals', () => {
-  expect(foe)
+  expect(fo)
 });

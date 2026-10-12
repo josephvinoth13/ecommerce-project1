@@ -1,5 +1,5 @@
-import axios from 'axios';
 import dayjs from 'dayjs';
+import { api, getAssetUrl } from '../../api';
 import { formatMoney } from '../../utils/money';
 import { DeliveryOptions } from './DeliveryOptions';
 
@@ -13,7 +13,7 @@ export function OrderSummary({ cart, deliveryOptions, loadCart }) {
           });
 
         const deleteCartItem = async () => {
-          await axios.delete(`/api/cart-items/${cartItem.productId}`);
+          await api.delete(`/api/cart-items/${cartItem.productId}`);
           await loadCart();
         };
 
@@ -25,7 +25,7 @@ export function OrderSummary({ cart, deliveryOptions, loadCart }) {
 
             <div className="cart-item-details-grid">
               <img className="product-image"
-                src={cartItem.product.image} />
+                src={getAssetUrl(cartItem.product.image)} />
 
               <div className="cart-item-details">
                 <div className="product-name">

@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { api } from '../../api';
 import { Header } from '../../components/Header';
 import { ProductsGrid } from './ProductsGrid';
 import './HomePage.css';
@@ -10,7 +10,7 @@ export function HomePage({ cart, loadCart, user, onLogout }) {
 
   useEffect(() => {
     const getHomeData = async () => {
-      const response = await axios.get('/api/products');
+      const response = await api.get('/api/products');
       setProducts(response.data);
     };
 

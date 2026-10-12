@@ -1,16 +1,20 @@
-import axios from 'axios';
 import { useState } from 'react';
+import { api, getAssetUrl } from '../../api';
 import { formatMoney } from '../../utils/money';
 
 export function Product({ product, loadCart }) {
   const [quantity, setQuantity] = useState(1);
 
   const addToCart = async () => {
-    await axios.post('/api/cart-items', {
+    try{
+    await api.post('/api/cart-items', {
       productId: product.id,
       quantity
     });
     await loadCart();
+  }catch(error){
+    console.error('Error adding product to cart:', error);
+  }
   };
  
 
@@ -23,7 +27,7 @@ export function Product({ product, loadCart }) {
     <div className="product-container">
       <div className="product-image-container">
         <img className="product-image"
-          src={product.image} />
+          src={getAssetUrl(product.image)} />
       </div>
 
       <div className="product-name limit-text-to-2-lines">
@@ -32,7 +36,7 @@ export function Product({ product, loadCart }) {
 
       <div className="product-rating-container">
         <img className="product-rating-stars"
-          src={`images/ratings/rating-${product.rating.stars * 10}.png`} />
+          src={getAssetUrl(`images/ratings/rating-${product.rating.stars * 10}.png`)} />
         <div className="product-rating-count link-primary">
           {product.rating.count}
         </div>
@@ -61,7 +65,7 @@ export function Product({ product, loadCart }) {
 
       <div className="added-to-cart"
       onClick={addToCart}>
-        <img src="images/icons/checkmark.png"/>
+        <img src={getAssetUrl('images/icons/checkmark.png')} />
         Added
       </div>
 

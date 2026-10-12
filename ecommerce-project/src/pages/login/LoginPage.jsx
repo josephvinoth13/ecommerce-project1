@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { api } from '../../api';
 import { saveAuthSession } from '../../auth';
 import './LoginPage.css';
 
@@ -21,7 +21,7 @@ export function LoginPage({ onAuthenticated }) {
     setIsSubmitting(true);
     try {
       const endpoint = isRegistering ? '/api/auth/register' : '/api/auth/login';
-      const response = await axios.post(endpoint, form);
+      const response = await api.post(endpoint, form);
       saveAuthSession(response.data.token);
       onAuthenticated(response.data.user);
       navigate('/');

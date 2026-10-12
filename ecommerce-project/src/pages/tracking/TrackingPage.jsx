@@ -1,8 +1,8 @@
-import axios from 'axios';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { Header } from '../../components/Header';
+import { api, getAssetUrl } from '../../api';
 import './TrackingPage.css';
 
 export function TrackingPage({ cart, user, onLogout }) {
@@ -11,7 +11,7 @@ export function TrackingPage({ cart, user, onLogout }) {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get(`/api/orders/${orderId}?expand=products`)
+    api.get(`/api/orders/${orderId}?expand=products`)
       .then((response) => {
         const selectedProduct = response.data.products.find(
           (product) => product.productId === productId
@@ -48,7 +48,7 @@ export function TrackingPage({ cart, user, onLogout }) {
             <div className="product-info">Quantity: {orderProduct.quantity}</div>
             <img
               className="product-image"
-              src={orderProduct.product.image}
+              src={getAssetUrl(orderProduct.product.image)}
               alt={orderProduct.product.name}
             />
 
